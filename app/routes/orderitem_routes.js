@@ -31,6 +31,7 @@ const router = express.Router()
 // GET /examples
 router.get('/orderitems', requireToken, (req, res, next) => {
   OrderItem.find()
+    .populate('product')
     .then(orderItems => {
       // `examples` will be an array of Mongoose documents
       // we want to convert each one to a POJO, so we use `.map` to
@@ -48,6 +49,7 @@ router.get('/orderitems', requireToken, (req, res, next) => {
 router.get('/orderitems/:id', requireToken, (req, res, next) => {
   // req.params.id will be set based on the `:id` in the route
   OrderItem.findById(req.params.id)
+    .populate('product')
     .then(handle404)
     // if `findById` is succesful, respond with 200 and "example" JSON
     .then(orderItem => res.status(200).json({ orderItem: orderItem.toObject() }))
@@ -80,6 +82,7 @@ router.patch('/orderitems/:id', requireToken, removeBlanks, (req, res, next) => 
   delete req.body.orderItem.owner
 
   OrderItem.findById(req.params.id)
+    .populate('product')
     .then(handle404)
     .then(orderItem => {
       // pass the `req` object and the Mongoose record to `requireOwnership`
@@ -99,6 +102,7 @@ router.patch('/orderitems/:id', requireToken, removeBlanks, (req, res, next) => 
 // DELETE /examples/5a7db6c74d55bc51bdf39793
 router.delete('/orderitems/:id', requireToken, (req, res, next) => {
   OrderItem.findById(req.params.id)
+    .populate('product')
     .then(handle404)
     .then(orderItem => {
       // throw an error if current user doesn't own `example`
