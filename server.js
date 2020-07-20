@@ -66,6 +66,29 @@ app.use(productRoutes)
 app.use(userRoutes)
 app.use(orderitemRoutes)
 
+// Stripe:
+const stripe = require('stripe')('sk_test_51H5c9lLWfFPh4sc7EhVpOArQIU0rsYzhhJ2kiarXBlNDIHgzlIvuE5UHg3ReAFjJv5JOi3DUNORKtB94xcGMKUzY00cMSRE4uM')
+app.use(express.static(''))
+app.use(express.json())
+const calculateOrderAmount = items => {
+  // Replace this constant with a calculation of the order's amount
+  // Calculate the order total on the server to prevent
+  // people from directly manipulating the amount on the client
+  return 1400
+}
+// stripe payment intent
+app.post('/create-payment-intent', async (req, res) => {
+  const { items } = req.body
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(items),
+    currency: 'usd'
+  })
+  res.send({
+    clientSecret: paymentIntent.client_secret
+  })
+})
+
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
 // passed any error messages from them
