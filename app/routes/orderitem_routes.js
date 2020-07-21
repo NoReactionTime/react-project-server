@@ -29,6 +29,21 @@ const router = express.Router()
 
 // INDEX
 // GET /examples
+// router.get('/orderitems', requireToken, (req, res, next) => {
+//   OrderItem.find()
+//     .populate('product')
+//     .then(orderItems => {
+//       // `examples` will be an array of Mongoose documents
+//       // we want to convert each one to a POJO, so we use `.map` to
+//       // apply `.toObject` to each one
+//       return orderItems.map(orderItem => orderItem.toObject())
+//     })
+//     // respond with status 200 and JSON of the examples
+//     .then(orderItems => res.status(200).json({ orderItems: orderItems }))
+//     // if an error occurs, pass it to the handler
+//     .catch(next)
+// })
+
 router.get('/orderitems', requireToken, (req, res, next) => {
   const id = res.req.user._id
   // console.log('Resource: ', id.toString())
@@ -39,6 +54,7 @@ router.get('/orderitems', requireToken, (req, res, next) => {
         if (orderItem.owner.toString() === id.toString()) {
           // console.log(orderItem)
           // console.log('Owner: ', orderItem.owner)
+
           return orderItem.toObject()
         }
       })
