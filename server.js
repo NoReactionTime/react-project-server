@@ -3,9 +3,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 
-// require stripe
-const stripe = require('stripe')('sk_test_51H5c9lLWfFPh4sc7EhVpOArQIU0rsYzhhJ2kiarXBlNDIHgzlIvuE5UHg3ReAFjJv5JOi3DUNORKtB94xcGMKUzY00cMSRE4uM')
-
 // require route files
 const productRoutes = require('./app/routes/product_routes')
 const userRoutes = require('./app/routes/user_routes')
@@ -69,7 +66,10 @@ app.use(productRoutes)
 app.use(userRoutes)
 app.use(orderitemRoutes)
 
-// stripe order total
+// Stripe:
+const stripe = require('stripe')('sk_test_51H5c9lLWfFPh4sc7EhVpOArQIU0rsYzhhJ2kiarXBlNDIHgzlIvuE5UHg3ReAFjJv5JOi3DUNORKtB94xcGMKUzY00cMSRE4uM')
+app.use(express.static(''))
+app.use(express.json())
 const calculateOrderAmount = items => {
   // Replace this constant with a calculation of the order's amount
   // Calculate the order total on the server to prevent

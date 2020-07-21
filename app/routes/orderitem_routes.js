@@ -52,8 +52,9 @@ router.get('/orderitems', requireToken, (req, res, next) => {
     .then(orderItems => {
       return orderItems.map(orderItem => {
         if (orderItem.owner.toString() === id.toString()) {
-          console.log(orderItem)
-          console.log('Owner: ', orderItem.owner)
+          // console.log(orderItem)
+          // console.log('Owner: ', orderItem.owner)
+
           return orderItem.toObject()
         }
       })
