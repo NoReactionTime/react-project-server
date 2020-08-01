@@ -14,11 +14,12 @@ const customErrors = require('../../lib/custom_errors')
 const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource
 // that's owned by someone else
-const requireOwnership = customErrors.requireOwnership
+
+// const requireOwnership = customErrors.requireOwnership
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
-const removeBlanks = require('../../lib/remove_blank_fields')
+// const removeBlanks = require('../../lib/remove_blank_fields')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -74,7 +75,7 @@ router.post('/products', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /examples/5a7db6c74d55bc51bdf39793
-router.patch('/products/:id', requireToken, removeBlanks, (req, res, next) => {
+router.patch('/products/:id', (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.product.owner
@@ -84,7 +85,7 @@ router.patch('/products/:id', requireToken, removeBlanks, (req, res, next) => {
     .then(product => {
       // pass the `req` object and the Mongoose record to `requireOwnership`
       // it will throw an error if the current user isn't the owner
-      requireOwnership(req, product)
+      // requireOwnership(req, product)
 
       // pass the result of Mongoose's `.update` to the next `.then`
       return product.updateOne(req.body.product)
@@ -97,12 +98,12 @@ router.patch('/products/:id', requireToken, removeBlanks, (req, res, next) => {
 
 // DESTROY
 // DELETE /examples/5a7db6c74d55bc51bdf39793
-router.delete('/products/:id', requireToken, (req, res, next) => {
+router.delete('/products/:id', (req, res, next) => {
   Product.findById(req.params.id)
     .then(handle404)
     .then(product => {
       // throw an error if current user doesn't own `example`
-      requireOwnership(req, product)
+      // requireOwnership(req, product)
       // delete the example ONLY IF the above didn't throw
       product.deleteOne()
     })
