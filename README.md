@@ -32,6 +32,7 @@ Our inital goal was to build out the user stories for our applications. We than 
 - Mongoose
 
 ## ERD
+![ERD](https://i.imgur.com/KBVuX8u.png)
 
 ## API End Points
 | Verb   | URI Pattern               | Controller#Action |
@@ -45,3 +46,6 @@ Our inital goal was to build out the user stories for our applications. We than 
 | INDEX  | `/orderitems`             | `orders#index`    |
 | POST   | `/orderitems`             | `orderitems#post` |
 | GET    | `/orderhistory`           | `ordeitems#index` |
+
+## Future Updates
+Adding the functionality to allow users to review products after they've been purchased. These reviews would consist of a numerical rating from 1-5, along with a description.
